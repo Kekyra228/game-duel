@@ -18,15 +18,16 @@ class Hero {
     }
     this.y += this.dy;
   }
-
+  //получить позицию противника, чтобы настроить направление выстрела
   getOpponent(otherHero) {
     return {
       x: otherHero.x,
       y: otherHero.y,
     };
   }
-
+  //передает позицию противника, чтобы снаряды летели в его сторону
   shoot(currentTime, opponent) {
+    //проверка прошло ли достаточно времени с момента выстрела
     if (currentTime - this.lastShot > this.fireRate) {
       const { x, y } = this.getOpponent(opponent);
       this.projectiles.push(new Spell(this.x, this.y, x, y, this.color));

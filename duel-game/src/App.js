@@ -3,8 +3,8 @@ import Hero from "./components/Hero";
 import Canvas from "./components/Canvas";
 
 const App = () => {
-  const [width] = useState(800);
-  const [height] = useState(600);
+  const [width] = useState(1900);
+  const [height] = useState(800);
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedHero, setSelectedHero] = useState(null);
   const [hero1Settings, setHero1Settings] = useState({
