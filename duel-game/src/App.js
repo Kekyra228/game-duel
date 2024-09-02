@@ -9,12 +9,12 @@ const App = () => {
   const [selectedHero, setSelectedHero] = useState(null);
   const [hero1Settings, setHero1Settings] = useState({
     color: "red",
-    speed: 2,
-    fireRate: 1000,
+    speed: 2.5,
+    fireRate: 1500, //интервал выстрела
   });
   const [hero2Settings, setHero2Settings] = useState({
     color: "blue",
-    speed: 2,
+    speed: 4,
     fireRate: 1000,
   });
 

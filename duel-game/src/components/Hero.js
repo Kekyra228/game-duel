@@ -13,6 +13,7 @@ class Hero {
   }
 
   move(canvasHeight) {
+    //смена направления движения
     if (this.y + this.radius > canvasHeight || this.y - this.radius < 0) {
       this.dy *= -1;
     }
