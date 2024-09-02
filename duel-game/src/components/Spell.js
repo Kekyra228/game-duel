@@ -23,6 +23,11 @@ class Spell {
     this.x += this.dx;
     this.y += this.dy;
   }
+  // Проверка столкновения с героем
+  isCrash(hero) {
+    const distance = Math.hypot(this.x - hero.x, this.y - hero.y);
+    return distance < this.radius + hero.radius;
+  }
 }
 
 export default Spell;

@@ -10,14 +10,22 @@ class Hero {
     this.fireRate = fireRate;
     this.spells = [];
     this.lastShot = 0;
+    this.countOfHits = 0;
   }
 
-  move(canvasHeight, mousePosition) {
+  move(canvasWidth, canvasHeight, mousePosition) {
     // смена направления движения при достижении границы
     if (this.y + this.radius > canvasHeight || this.y - this.radius < 0) {
       this.dy *= -1;
     }
     this.y += this.dy;
+
+    //ограничение движения в рамках холста
+    if (this.x + this.radius > canvasWidth) {
+      this.x = canvasWidth - this.radius;
+    } else if (this.x - this.radius < 0) {
+      this.x = this.radius;
+    }
 
     // отталкивание от курсора мыши
     if (mousePosition.x !== null && mousePosition.y !== null) {
@@ -59,9 +67,14 @@ class Hero {
     }
   }
 
-  updateSpells(canvasWidth) {
+  updateSpells(canvasWidth, opponent) {
     this.spells = this.spells.filter((spell) => {
       spell.update();
+      if (spell.isCrash(opponent)) {
+        this.countOfHits++;
+        console.log("попадание");
+        return false; //удаление снаряда
+      }
       return spell.x >= 0 && spell.x <= canvasWidth;
     });
   }

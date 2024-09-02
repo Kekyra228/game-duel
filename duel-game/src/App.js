@@ -87,11 +87,11 @@ const App = () => {
     (context, currentTime) => {
       context.clearRect(0, 0, width, height);
 
-      hero1.current.move(height, mousePosition);
-      hero2.current.move(height, mousePosition);
+      hero1.current.move(width, height, mousePosition);
+      hero2.current.move(width, height, mousePosition);
 
-      hero1.current.updateSpells(width);
-      hero2.current.updateSpells(width);
+      hero1.current.updateSpells(width, hero2.current);
+      hero2.current.updateSpells(width, hero1.current);
 
       hero1.current.shoot(currentTime, hero2.current);
       hero2.current.shoot(currentTime, hero1.current);
@@ -104,6 +104,10 @@ const App = () => {
 
   return (
     <div>
+      <div>
+        <p>Попадания левого героя: {hero1.current.countOfHits}</p>
+        <p>Попадания правого героя: {hero2.current.countOfHits}</p>
+      </div>
       <Canvas
         draw={draw}
         width={width}
