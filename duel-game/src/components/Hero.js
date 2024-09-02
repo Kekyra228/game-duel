@@ -13,11 +13,12 @@ class Hero {
   }
 
   move(canvasHeight, mousePosition) {
-    //смена направления движения
+    // смена направления движения при достижении границы
     if (this.y + this.radius > canvasHeight || this.y - this.radius < 0) {
       this.dy *= -1;
     }
     this.y += this.dy;
+
     // отталкивание от курсора мыши
     if (mousePosition.x !== null && mousePosition.y !== null) {
       const distance = Math.hypot(
@@ -25,10 +26,17 @@ class Hero {
         mousePosition.y - this.y
       );
       if (distance < this.radius) {
-        this.dy = -this.dy; // отталкивание
+        const angle = Math.atan2(
+          this.y - mousePosition.y,
+          this.x - mousePosition.x
+        );
+        const pushStrength = 5; // сила отталкивания
+        this.x += pushStrength * Math.cos(angle);
+        this.y += pushStrength * Math.sin(angle);
       }
     }
   }
+
   //получить позицию противника, чтобы настроить направление выстрела
   getOpponent(otherHero) {
     return {

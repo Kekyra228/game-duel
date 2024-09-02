@@ -53,17 +53,20 @@ const App = () => {
     hero2.current.fireRate = hero2Settings.fireRate;
   }, [hero1Settings, hero2Settings]);
 
+  //фун-я для сохранения координат мыши для изменения движения героя
   const handleMouseMove = (event) => {
     const { clientX, clientY } = event;
     const canvasRect = event.target.getBoundingClientRect();
     const offsetX = clientX - canvasRect.left;
     const offsetY = clientY - canvasRect.top;
-
     setMousePosition({ x: offsetX, y: offsetY });
   };
 
   const handleMouseClick = (event) => {
-    const { offsetX, offsetY } = event;
+    const canvasRect = event.target.getBoundingClientRect();
+    const offsetX = event.clientX - canvasRect.left;
+    const offsetY = event.clientY - canvasRect.top;
+
     if (
       Math.hypot(offsetX - hero1.current.x, offsetY - hero1.current.y) <
       hero1.current.radius
@@ -106,6 +109,7 @@ const App = () => {
         width={width}
         height={height}
         onClick={handleMouseClick}
+        onMouseMove={handleMouseMove}
       />
       {menuVisible && selectedHero && (
         <div className="menu">
