@@ -3,10 +3,14 @@ import Hero from "./components/Hero";
 import Canvas from "./components/Canvas";
 
 const App = () => {
+  const [mousePosition, setMousePosition] = useState({ x: null, y: null });
   const [width] = useState(1900);
   const [height] = useState(800);
+
+  //управление видимостью меню и выбранным героем
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedHero, setSelectedHero] = useState(null);
+
   const [hero1Settings, setHero1Settings] = useState({
     color: "red",
     speed: 2.5,
@@ -49,8 +53,17 @@ const App = () => {
     hero2.current.fireRate = hero2Settings.fireRate;
   }, [hero1Settings, hero2Settings]);
 
+  const handleMouseMove = (event) => {
+    const { clientX, clientY } = event;
+    const canvasRect = event.target.getBoundingClientRect();
+    const offsetX = clientX - canvasRect.left;
+    const offsetY = clientY - canvasRect.top;
+
+    setMousePosition({ x: offsetX, y: offsetY });
+  };
+
   const handleMouseClick = (event) => {
-    const { offsetX, offsetY } = event.nativeEvent;
+    const { offsetX, offsetY } = event;
     if (
       Math.hypot(offsetX - hero1.current.x, offsetY - hero1.current.y) <
       hero1.current.radius
@@ -66,20 +79,24 @@ const App = () => {
     }
   };
 
+  //отрисовка и обновление героев
   const draw = useCallback(
     (context, currentTime) => {
       context.clearRect(0, 0, width, height);
-      hero1.current.move(height);
-      hero2.current.move(height);
-      hero1.current.updateProjectiles(width);
-      hero2.current.updateProjectiles(width);
-      hero1.current.draw(context);
-      hero2.current.draw(context);
+
+      hero1.current.move(height, mousePosition);
+      hero2.current.move(height, mousePosition);
+
+      hero1.current.updateSpells(width);
+      hero2.current.updateSpells(width);
 
       hero1.current.shoot(currentTime, hero2.current);
       hero2.current.shoot(currentTime, hero1.current);
+
+      hero1.current.draw(context);
+      hero2.current.draw(context);
     },
-    [width, height]
+    [width, height, mousePosition]
   );
 
   return (
@@ -94,7 +111,7 @@ const App = () => {
         <div className="menu">
           <h2>Настройки для героя</h2>
           <label>
-            Цвет заклинания:
+            Цвет:
             <input
               type="color"
               value={selectedHero.color}
